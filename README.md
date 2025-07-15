@@ -33,8 +33,6 @@ Boosts productivity and simplifies multitasking
 
 No clicks, no typing – just say what you want
 
-<h2>Website:</h2>
-https://xml-differencer.onrender.com/
 
-<h3>XML is tricky. Your tools shouldn’t be.
-Whether you're maintaining legacy systems or building something new, XML Difference Checker makes sure you're always in sync with your data.</h3>
+
+<h3>Friday never sleeps. She listens, learns, and helps — so you can focus on what matters.</h3>
