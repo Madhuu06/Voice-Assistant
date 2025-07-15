@@ -1,4 +1,4 @@
-<h3>Friday – Your PC’s Voice Assistant</h3>
+<h1>Friday – Your PC’s Voice Assistant</h1>
 A powerful, always-listening assistant built for hands-free control over your computer. Open apps, folders, and files just by speaking. Whether you're working, studying, or relaxing, Friday is just a wake word away.
 
 🚀 Table of Contents
