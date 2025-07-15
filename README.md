@@ -1,24 +1,24 @@
 <h1>Friday – Your PC’s Voice Assistant</h1>
 A powerful, always-listening assistant built for hands-free control over your computer. Open apps, folders, and files just by speaking. Whether you're working, studying, or relaxing, Friday is just a wake word away.
 
-🚀 Table of Contents
-Introduction
+<h2>🚀 Table of Contents</h2>
+<ul>
+<il>Introduction</il>
 
-Features
+<il>Features</il>
 
-Tech Stack
+<il>Tech Stack</il>
 
-Installation
+<il>Installation</il>
 
-Usage
+<il>Usage</il>
 
-Wake Word & Commands
+<il>Wake Word & Commands</il>
 
-Customization
+<il>Customization</il>
 
-Contributing
-
-Contact
+<il>Contributing</il>
+</ul>
 
 📖 Introduction
 Welcome to Friday, your personal desktop voice assistant inspired by sci-fi AI. Built with Python and designed for flexibility, Friday lets you interact with your PC naturally using voice commands. Whether it’s opening software, searching files, or accessing folders buried deep in your system, Friday is always there in the background — ready to help.
