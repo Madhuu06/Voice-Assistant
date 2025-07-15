@@ -68,9 +68,9 @@ After activation, speak a command such as:
 <li>“Launch Downloads folder”</li>
 
 <li>“Find my resume PDF”</li>
-
-<li>You can also predefine mappings or let Friday search dynamically.</li>
 </ul>
+You can also predefine mappings or let Friday search dynamically.
+
 
 <h2>🗣️ Wake Word & Commands</h2>
 Default Wake Word: “Hey Friday”
