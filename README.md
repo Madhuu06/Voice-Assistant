@@ -2,37 +2,42 @@
 Your personal assistant for your PC who is always there whenever want something.
 
 <h2>🚀Features</h2>
-Voice-activated control of your PC
+<ul>
+<li>Voice-activated control of your PC</li>
 
-Opens any app, folder, or file — no matter where it’s stored
+<li>Opens any app, folder, or file — no matter where it’s stored</li>
 
-Smart file/folder mapping – works with premapped locations or intelligently searches if not predefined
+<li>Smart file/folder mapping – works with premapped locations or intelligently searches if not predefined</li>
 
-Always-on background service – Friday is quietly listening, ready to spring into action instantly
+<li>Always-on background service – Friday is quietly listening, ready to spring into action instantly</li>
 
-Understands intent, not just keywords – no rigid commands needed
+<li>Understands intent, not just keywords – no rigid commands needed</li>
+</ul>
 
 
 <h2>👤 Who It's For</h2>
-Power users who want hands-free control over their system
+<ul>
+<li>Power users who want hands-free control over their system</li>
 
-Students and professionals juggling multiple tasks
+<li>Students and professionals juggling multiple tasks</li>
 
-Creators, coders, or gamers who want a Jarvis-style interface
+<li>Creators, coders, or gamers who want a Jarvis-style interface</li>
 
-Anyone building a smarter, more intuitive desktop experience
+<li>Anyone building a smarter, more intuitive desktop experience</li>
+</ul>
 
 <h2>💡 Why Use It?</h2>
-Instant response with natural commands
+<ul>
+<li>Instant response with natural commands</li>
 
-Feels like talking to a real assistant
+<li>Feels like talking to a real assistant</li>
 
-Searches dynamically if file/app paths aren’t pre-defined
+<li>Searches dynamically if file/app paths aren’t pre-defined</li>
 
-Boosts productivity and simplifies multitasking
+<li>Boosts productivity and simplifies multitasking</li>
 
-No clicks, no typing – just say what you want
-
+<li>No clicks, no typing – just say what you want</li>
+</ul>
 
 
 <h3>Friday never sleeps. She listens, learns, and helps — so you can focus on what matters.</h3>
