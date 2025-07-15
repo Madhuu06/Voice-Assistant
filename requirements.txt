@@ -1,0 +1,5 @@
+pvporcupine
+sounddevice
+speechrecognition
+pyttsx3
+pyaudio
