@@ -2,35 +2,32 @@
 Your personal assistant for your PC who is always there whenever want something.
 
 <h2>🚀Features</h2>
-Paste or upload two XML files
+Voice-activated control of your PC
 
-Automatically parses and compares both structures
+Opens any app, folder, or file — no matter where it’s stored
 
-Points out difference detection:
+Smart file/folder mapping – works with premapped locations or intelligently searches if not predefined
 
-Missing or extra tags
+Always-on background service – Friday is quietly listening, ready to spring into action instantly
 
-Changed values or attributes
+Understands intent, not just keywords – no rigid commands needed
 
-Structural mismatches
-
-Tabular view for instant clarity
 
 <h2>👤 Who It's For</h2>
-Backend developers comparing config or API changes
+Power users who want hands-free control over their system
 
-QA testers validating output vs expected XML
+Students and professionals juggling multiple tasks
 
-Students learning XML structure through practical comparison
+Creators, coders, or gamers who want a Jarvis-style interface
+
+Anyone building a smarter, more intuitive desktop experience
 
 <h2>💡 Why Use It?</h2>
-⚡ Instant comparisons, no setup needed
-
-🧠 Designed for clarity and speed
-
-🎯 Helps reduce errors and debugging time
-
-✅ Just open, paste, and go
+⚡ Instant response with natural commands
+🗣️ Feels like talking to a real assistant
+🧭 Searches dynamically if file/app paths aren’t pre-defined
+🎯 Boosts productivity and simplifies multitasking
+💻 No clicks, no typing – just say what you want
 
 <h2>Website:</h2>
 https://xml-differencer.onrender.com/
