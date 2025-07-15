@@ -23,11 +23,15 @@ Creators, coders, or gamers who want a Jarvis-style interface
 Anyone building a smarter, more intuitive desktop experience
 
 <h2>💡 Why Use It?</h2>
-⚡ Instant response with natural commands
-🗣️ Feels like talking to a real assistant
-🧭 Searches dynamically if file/app paths aren’t pre-defined
-🎯 Boosts productivity and simplifies multitasking
-💻 No clicks, no typing – just say what you want
+Instant response with natural commands
+
+Feels like talking to a real assistant
+
+Searches dynamically if file/app paths aren’t pre-defined
+
+Boosts productivity and simplifies multitasking
+
+No clicks, no typing – just say what you want
 
 <h2>Website:</h2>
 https://xml-differencer.onrender.com/
