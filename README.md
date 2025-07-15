@@ -72,48 +72,29 @@ After activation, speak a command such as:
 <li>You can also predefine mappings or let Friday search dynamically.</li>
 </ul>
 
-🗣️ Wake Word & Commands
+<h2>🗣️ Wake Word & Commands</h2>
 Default Wake Word: “Hey Friday”
 You can customize the wake word using Porcupine's SDK or a hotword detector.
 
 Example Commands:
+<ul>
+<li>Open applications: “Open Spotify”</li>
 
-Open applications: “Open Spotify”
+<li>Navigate folders: “Open Documents”, “Show me Pictures”</li>
 
-Navigate folders: “Open Documents”, “Show me Pictures”
+<li>Launch files: “Open Budget.xlsx”, “Find project report”</li>
+</ul>
 
-Launch files: “Open Budget.xlsx”, “Find project report”
+<h2>🎨 Customization</h2>
+<ul>
+<li>Add your own wake word</li>
 
-🎨 Customization
-Add your own avatar image in the assets/ folder
+<li>Modify or add new command mappings</li>
 
-Modify or add new command mappings in commands.json
+<li>Switch TTS engine between pyttsx3, Google TTS, or ElevenLabs</li>
 
-Switch TTS engine between pyttsx3, Google TTS, or ElevenLabs
+<li>Adjust sensitivity, hotword settings, or microphone input in config.py</li>
+</ul>
 
-Adjust sensitivity, hotword settings, or microphone input in config.py
+<h2>Friday never sleeps. She listens, learns, and helps — so you can focus on what matters.</h2>
 
-🤝 Contributing
-Contributions are welcome! Here's how to get started:
-
-Fork the repo
-
-Create a new branch:
-
-bash
-Copy
-Edit
-git checkout -b feature/MyFeature
-Commit your changes:
-
-bash
-Copy
-Edit
-git commit -m "Add MyFeature"
-Push to your branch:
-
-bash
-Copy
-Edit
-git push origin feature/MyFeature
-Open a Pull Request
