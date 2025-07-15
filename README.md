@@ -20,44 +20,42 @@ A powerful, always-listening assistant built for hands-free control over your co
 <li>Contributing</li>
 </ul>
 
-📖 Introduction
+<h2>📖 Introduction</h2>
 Welcome to Friday, your personal desktop voice assistant inspired by sci-fi AI. Built with Python and designed for flexibility, Friday lets you interact with your PC naturally using voice commands. Whether it’s opening software, searching files, or accessing folders buried deep in your system, Friday is always there in the background — ready to help.
 
-🌟 Features
-🔊 Voice-Activated Commands – Open any app, file, or folder hands-free
+<h2>🌟 Features</h2>
+<ul>
+<li>🔊 Voice-Activated Commands – Open any app, file, or folder hands-free</li>
 
-🧠 Smart Path Detection – Can search and locate items dynamically if not pre-mapped
+<li>🧠 Smart Path Detection – Can search and locate items dynamically if not pre-mapped</li>
 
-👂 Always Listening – Runs in the background and responds instantly to your wake word
+<li>👂 Always Listening – Runs in the background and responds instantly to your wake word</li>
 
-💬 Natural Speech Recognition – No rigid syntax; understands intent
+<li>💬 Natural Speech Recognition – No rigid syntax; understands intent</li>
+</ul>
 
-🎨 Custom Avatar Support – Add your own assistant image for visual flair
+<h2>💻 Tech Stack</h2>
+<ul>
+<li>Core Language: Python 3</li>
 
-⚙️ Modular Design – Easily extendable for custom tasks and integrations
+<li>Speech Recognition: speech_recognition, pyaudio</li>
 
-💻 Tech Stack
-Core Language: Python 3
+<li>Text-to-Speech: pyttsx3 (offline)</li>
 
-Speech Recognition: speech_recognition, pyaudio
+<li>Wake Word Detection: porcupine or custom-trained wake word</li>
 
-Text-to-Speech: pyttsx3 (offline) or [ElevenLabs / Google TTS] (optional)
+<li>Packaging: PyInstaller for executable bundling</li>
 
-Wake Word Detection: porcupine or custom-trained wake word
+<li>File Access: os, subprocess, glob, and fuzzywuzzy for smart matching</li>
+</ul>
 
-UI (Optional): Tkinter / PyQt for popup interface
-
-Packaging: PyInstaller for executable bundling
-
-File Access: os, subprocess, glob, and fuzzywuzzy for smart matching
-
-🛠 Installation
+<h2>🛠 Installation</h2>
 📋 Prerequisites
 Python 3.8+
 
 pip
 
-(Optional) API keys for online TTS (like ElevenLabs)
+API key for wake word (porcupine)
 
 📥 Steps
 Clone the repository:
