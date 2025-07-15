@@ -3,21 +3,21 @@ A powerful, always-listening assistant built for hands-free control over your co
 
 <h2>🚀 Table of Contents</h2>
 <ul>
-<il>Introduction</il>
+<li>Introduction</li>
 
-<il>Features</il>
+<li>Features</li>
 
-<il>Tech Stack</il>
+<li>Tech Stack</li>
 
-<il>Installation</il>
+<li>Installation</li>
 
-<il>Usage</il>
+<li>Usage</li>
 
-<il>Wake Word & Commands</il>
+<li>Wake Word & Commands</li>
 
-<il>Customization</il>
+<li>Customization</li>
 
-<il>Contributing</il>
+<li>Contributing</li>
 </ul>
 
 📖 Introduction
