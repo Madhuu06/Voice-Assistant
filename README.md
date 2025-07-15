@@ -50,12 +50,14 @@ Welcome to Friday, your personal desktop voice assistant inspired by sci-fi AI. 
 </ul>
 
 <h2>🛠 Installation</h2>
-📋 Prerequisites
-Python 3.8+
+<h1>📋 Prerequisites</h1>
+<ul>
+  <li>Python 3.8+</li>
 
-pip
+<li>pip</li>
 
-API key for wake word (porcupine)
+<li>API key for wake word (porcupine)</li>
+</ul>
 
 📥 Steps
 Clone the repository:
