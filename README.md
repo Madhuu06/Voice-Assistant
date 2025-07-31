@@ -17,7 +17,6 @@ A powerful, always-listening assistant built for hands-free control over your co
 
 <li>Customization</li>
 
-<li>Contributing</li>
 </ul>
 
 <h2>📖 Introduction</h2>
