@@ -71,7 +71,7 @@ After activation, speak a command such as:
 You can also predefine mappings or let Friday search dynamically.
 
 
-<h2>🗣Wake Word & Commands</h2>
+<h2>Wake Word & Commands</h2>
 Default Wake Word: “Hey Friday”
 You can customize the wake word using Porcupine's SDK or a hotword detector.
 
