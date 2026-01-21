@@ -1,0 +1,55 @@
+# Python cache and bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environment
+.venv/
+venv/
+ENV/
+env/
+
+# Logs
+logs/
+*.log
+
+# Cache files
+app_cache.json
+usage_patterns.json
+elevenlabs_config.json
+
+# Test files
+test_*.py
+debug_*.py
+quick_test.py
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Windows
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Audio files (if any)
+*.wav
+*.mp3
+*.ogg
+
+# Whisper models cache
+*.pt
+
+# Temporary files
+*.tmp
+*.temp
