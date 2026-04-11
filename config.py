@@ -14,11 +14,11 @@ CONFIG_FILE = CONFIG_DIR / "config.yaml"
 def _load_config():
     """Load config from YAML file, falling back to defaults."""
     defaults = {
-        "assistant": {"name": "Maya", "personality": "friday"},
+        "assistant": {"name": "Eva", "personality": "minimalist"},
         "activation": {
             "mode": "push_to_talk",
             "push_to_talk_key": "f12",
-            "wake_words": ["maya", "hey maya", "hello maya"],
+            "wake_words": ["eva", "hey eva", "hello eva"],
         },
         "llm": {
             "model": "qwen:7b",
@@ -26,9 +26,10 @@ def _load_config():
             "max_tokens": 512,
             "temperature": 0.7,
             "system_prompt": (
-                "You are Maya, a voice assistant inspired by Tony Stark's F.R.I.D.A.Y. "
-                "You are professional, concise, and slightly witty. Keep responses short "
-                "and spoken-friendly. Two sentences max unless explaining something complex."
+                "You are Eva, a highly intelligent AI assistant.\n"
+                "CRITICAL INSTRUCTION: You must ALWAYS respond with EXTREMELY short, single-sentence answers.\n"
+                "Never explain yourself unless the user explicitly asks for a detailed explanation.\n"
+                "Never use markdown, bullet points, or conversational filler."
             ),
         },
         "stt": {
@@ -39,7 +40,7 @@ def _load_config():
         },
         "tts": {
             "engine": "edge_tts",
-            "edge_tts": {"voice": "en-US-AnaNeural"},
+            "edge_tts": {"voice": "en-US-AriaNeural", "rate": "+15%"},
             "pyttsx3": {
                 "rate": 170,
                 "volume": 1.0,
@@ -47,7 +48,7 @@ def _load_config():
             },
         },
         "vision": {"enabled": True, "model": "moondream"},
-        "memory": {"db_path": "maya_memory.db", "max_history": 20, "log_commands": True},
+        "memory": {"db_path": "eva_memory.db", "max_history": 20, "log_commands": True},
         "commands": {"timeout": 30, "phrase_limit": 7},
     }
 
@@ -100,6 +101,7 @@ STT_LANGUAGE = _cfg["stt"]["language"]
 # ── TTS ──────────────────────────────────────────────────────
 TTS_ENGINE = _cfg["tts"]["engine"]
 EDGE_TTS_VOICE = _cfg["tts"]["edge_tts"]["voice"]
+EDGE_TTS_RATE = _cfg["tts"]["edge_tts"].get("rate", "+0%")
 PYTTSX3_RATE = _cfg["tts"]["pyttsx3"]["rate"]
 PYTTSX3_VOLUME = _cfg["tts"]["pyttsx3"]["volume"]
 PYTTSX3_VOICES = _cfg["tts"]["pyttsx3"]["preferred_voices"]

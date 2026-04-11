@@ -4,14 +4,14 @@
 # ═══════════════════════════════════════════════════════════════
 
 assistant:
-  name: "Maya"
-  personality: "friday"  # friday | casual | custom
+  name: "Eva"
+  personality: "minimalist"
 
 # ── Activation ────────────────────────────────────────────────
 activation:
   mode: "push_to_talk"       # push_to_talk | wake_word
   push_to_talk_key: "f12"    # Key to hold for recording
-  wake_words: ["maya", "hey maya", "hello maya"]  # Fallback if mode=wake_word
+  wake_words: ["eva", "hey eva", "hello eva"]  # Fallback if mode=wake_word
 
 # ── LLM (Ollama) ─────────────────────────────────────────────
 llm:
@@ -20,13 +20,11 @@ llm:
   max_tokens: 512
   temperature: 0.7
   system_prompt: |
-    You are Maya, a voice assistant inspired by Tony Stark's F.R.I.D.A.Y.
-    You are professional, concise, and slightly witty. Keep responses short
-    and spoken-friendly — no markdown, no bullet points, no emojis.
-    You control the user's Windows PC. You can open apps, search files,
-    control volume, take screenshots, check system info, and see the screen.
-    If the user asks something you can't do, say so briefly.
-    Never be verbose. Two sentences max unless explaining something complex.
+    You are Eva, a highly intelligent AI assistant.
+    CRITICAL INSTRUCTION: You must ALWAYS respond with EXTREMELY short, single-sentence answers.
+    Never explain yourself unless the user explicitly asks for a detailed explanation.
+    Never use markdown, bullet points, or conversational filler.
+    You control the user's Windows PC. You can open apps, search files, control volume, take screenshots, check system info, and see the screen.
 
 # ── STT (Whisper) ─────────────────────────────────────────────
 stt:
@@ -39,8 +37,8 @@ stt:
 tts:
   engine: "edge_tts"          # edge_tts | elevenlabs | pyttsx3
   edge_tts:
-    voice: "en-US-AnaNeural"  # Microsoft neural voice (FRIDAY-like)
-    # Other options: en-US-JennyNeural, en-GB-SoniaNeural, en-US-AriaNeural
+    voice: "en-US-AriaNeural"  # Professional, confident female voice
+    rate: "+15%"               # Speed up the voice (+15%)
   pyttsx3:
     rate: 170
     volume: 1.0
@@ -53,7 +51,7 @@ vision:
 
 # ── Memory ────────────────────────────────────────────────────
 memory:
-  db_path: "maya_memory.db"
+  db_path: "eva_memory.db"
   max_history: 20            # Conversation turns to keep in context
   log_commands: true
 

@@ -33,7 +33,7 @@ def setup_logging():
     Returns:
         Logger instance named 'maya'.
     """
-    logger_name = "maya"
+    logger_name = "eva"
 
     # Avoid duplicate handlers on repeated calls
     logger = logging.getLogger(logger_name)
@@ -48,7 +48,7 @@ def setup_logging():
 
     # ── File handler (ISO timestamps, detailed) ──────────────
     file_handler = logging.FileHandler(
-        log_dir / "maya.log", encoding="utf-8"
+        log_dir / "eva.log", encoding="utf-8"
     )
     file_handler.setLevel(logging.DEBUG)
     file_handler.setFormatter(logging.Formatter(

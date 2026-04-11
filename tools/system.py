@@ -7,6 +7,7 @@ import os
 import subprocess
 from datetime import datetime
 from logger import setup_logging
+from config import ASSISTANT_NAME
 
 logger = setup_logging()
 
@@ -184,7 +185,7 @@ def shutdown(delay=10):
     """Shutdown with safety delay."""
     try:
         subprocess.run(
-            f'shutdown /s /t {delay} /c "Maya: Shutting down in {delay} seconds — run shutdown /a to cancel"',
+            f'shutdown /s /t {delay} /c "{ASSISTANT_NAME}: Shutting down in {delay} seconds — run shutdown /a to cancel"',
             shell=True, timeout=5,
         )
         return True
@@ -196,7 +197,7 @@ def restart(delay=10):
     """Restart with safety delay."""
     try:
         subprocess.run(
-            f'shutdown /r /t {delay} /c "Maya: Restarting in {delay} seconds — run shutdown /a to cancel"',
+            f'shutdown /r /t {delay} /c "{ASSISTANT_NAME}: Restarting in {delay} seconds — run shutdown /a to cancel"',
             shell=True, timeout=5,
         )
         return True

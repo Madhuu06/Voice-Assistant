@@ -11,8 +11,10 @@ import time
 import asyncio
 import threading
 import tempfile
+import queue
 from config import (
-    TTS_ENGINE, EDGE_TTS_VOICE, PYTTSX3_RATE, PYTTSX3_VOLUME, PYTTSX3_VOICES,
+    TTS_ENGINE, EDGE_TTS_VOICE, EDGE_TTS_RATE, PYTTSX3_RATE, PYTTSX3_VOLUME, PYTTSX3_VOICES,
+    ASSISTANT_NAME
 )
 from logger import setup_logging
 
@@ -25,14 +27,86 @@ PYTTSX3_AVAILABLE = False
 _pyttsx3_engine = None
 _tts_lock = threading.Lock()
 
-# Edge TTS voice from config
+# Edge TTS voice and rate from config
 EDGE_VOICE = EDGE_TTS_VOICE
-# Other great options (can be set in config.yaml):
-#   "en-US-JennyNeural"     — warm, professional female
-#   "en-US-AriaNeural"      — expressive female
-#   "en-GB-SoniaNeural"     — British female
-#   "en-US-GuyNeural"       — male voice
+EDGE_RATE = EDGE_TTS_RATE
 
+# TTS Pipelining setup
+_tts_text_queue = queue.Queue()
+_tts_audio_queue = queue.Queue()
+_tts_generator_thread = None
+_tts_player_thread = None
+_tts_stop_event = threading.Event()
+
+def _tts_generator_worker():
+    """Generates audio files in the background, piping them to the player thread."""
+    while True:
+        item = _tts_text_queue.get()
+        if item is None:
+            break
+        text, show_text = item
+        
+        if _tts_stop_event.is_set():
+            _tts_text_queue.task_done()
+            continue
+
+        try:
+            # Generate Edge TTS file
+            if EDGE_TTS_AVAILABLE:
+                import edge_tts, asyncio, concurrent.futures
+                temp_path = tempfile.mktemp(suffix='.mp3', prefix='maya_tts_')
+                async def _generate():
+                    communicate = edge_tts.Communicate(text, EDGE_VOICE, rate=EDGE_RATE)
+                    await communicate.save(temp_path)
+                    
+                try:
+                    loop = asyncio.get_event_loop()
+                    if loop.is_running():
+                        with concurrent.futures.ThreadPoolExecutor() as pool:
+                            pool.submit(lambda: asyncio.run(_generate())).result()
+                    else:
+                        loop.run_until_complete(_generate())
+                except RuntimeError:
+                    asyncio.run(_generate())
+                    
+                _tts_audio_queue.put((temp_path, show_text, text, "edge"))
+            else:
+                _tts_audio_queue.put((None, show_text, text, "pyttsx3"))
+        except Exception:
+            _tts_audio_queue.put((None, show_text, text, "pyttsx3"))
+            
+        _tts_text_queue.task_done()
+
+def _tts_player_worker():
+    """Plays generated audio files sequentially."""
+    while True:
+        item = _tts_audio_queue.get()
+        if item is None:
+            break
+        filepath, show_text, text, engine = item
+        
+        if _tts_stop_event.is_set():
+            if filepath and os.path.exists(filepath):
+                try: os.unlink(filepath)
+                except OSError: pass
+            _tts_audio_queue.task_done()
+            continue
+
+        if show_text:
+            print(f"    {ASSISTANT_NAME}: {text}")
+            
+        if engine == "edge" and filepath:
+            _play_audio_file(filepath)
+            for _ in range(5):
+                try:
+                    if os.path.exists(filepath): os.unlink(filepath)
+                    break
+                except OSError: time.sleep(0.2)
+        else:
+            if PYTTSX3_AVAILABLE:
+                _speak_pyttsx3(text)
+                
+        _tts_audio_queue.task_done()
 
 # ── Edge TTS Setup ───────────────────────────────────────────
 
@@ -99,104 +173,63 @@ def init():
     )
     print(f"   └── Active TTS engine: {engine_name}\n")
 
+    global _tts_generator_thread, _tts_player_thread
+    if _tts_generator_thread is None:
+        _tts_generator_thread = threading.Thread(target=_tts_generator_worker, daemon=True)
+        _tts_player_thread = threading.Thread(target=_tts_player_worker, daemon=True)
+        _tts_generator_thread.start()
+        _tts_player_thread.start()
+
 
 # ── Public API ───────────────────────────────────────────────
 
 def speak(text, show_text=True):
     """
-    Speak text using the best available TTS engine.
-
-    Args:
-        text: The string to speak.
-        show_text: If True, also print the text to console.
+    Queue text to be spoken using the best available TTS engine.
+    This does not block, allowing LLM or other tasks to flow instantly.
     """
     if not text or not text.strip():
         return
+    _tts_text_queue.put((text, show_text))
 
-    if show_text:
-        print(f"    Maya: {text}")
+# Old synchronous fallback removed to prevent loop lock
+def _process_speak(text, show_text=True):
+    pass
 
-    with _tts_lock:
-        # Try ElevenLabs first (if configured)
+
+
+def stop():
+    """Interrupt current TTS playback and clear the queue."""
+    _tts_stop_event.set()
+    
+    # Empty queues
+    while not _tts_text_queue.empty():
         try:
-            from elevenlabs_voice import speak_with_elevenlabs, is_elevenlabs_ready
-            if is_elevenlabs_ready():
-                if speak_with_elevenlabs(text):
-                    return
-                logger.warning("ElevenLabs failed, falling back")
-        except ImportError:
-            pass
+            _tts_text_queue.get_nowait()
+            _tts_text_queue.task_done()
+        except queue.Empty: break
+        
+    while not _tts_audio_queue.empty():
+        try:
+            item = _tts_audio_queue.get_nowait()
+            if item and item[0] and os.path.exists(item[0]):
+                try: os.unlink(item[0])
+                except OSError: pass
+            _tts_audio_queue.task_done()
+        except queue.Empty: break
+            
+    # Stop pygame playback
+    try:
+        import pygame
+        if pygame.mixer.get_init():
+            pygame.mixer.music.stop()
+    except Exception:
+        pass
 
-        # Try Edge TTS
-        if EDGE_TTS_AVAILABLE:
-            if _speak_edge_tts(text):
-                return
-
-        # Fallback to pyttsx3
-        if PYTTSX3_AVAILABLE:
-            _speak_pyttsx3(text)
-            return
-
-        # Nothing available
-        logger.error("No TTS engine available!")
-
-
-def speak_streaming(text, show_text=True):
-    """
-    Speak text optimized for streaming — called per-sentence
-    during LLM streaming output.
-    """
-    speak(text, show_text=show_text)
-
-
-# ── Edge TTS Engine ─────────────────────────────────────────
 
 def _speak_edge_tts(text):
-    """Generate and play speech using Edge TTS (Microsoft neural voices)."""
-    try:
-        import edge_tts
-        import sounddevice as sd
-        import soundfile as sf
-        import io
-
-        # Use unique temp file to avoid permission conflicts
-        temp_path = tempfile.mktemp(suffix='.mp3', prefix='maya_tts_')
-
-        # Run async edge-tts in a sync context
-        async def _generate():
-            communicate = edge_tts.Communicate(text, EDGE_VOICE)
-            await communicate.save(temp_path)
-
-        # Create new event loop if needed (avoid issues in threaded contexts)
-        try:
-            loop = asyncio.get_event_loop()
-            if loop.is_running():
-                # We're inside an async context, use a new thread
-                import concurrent.futures
-                with concurrent.futures.ThreadPoolExecutor() as pool:
-                    pool.submit(lambda: asyncio.run(_generate())).result()
-            else:
-                loop.run_until_complete(_generate())
-        except RuntimeError:
-            asyncio.run(_generate())
-
-        # Play the generated audio
-        _play_audio_file(temp_path)
-
-        # Cleanup — retry if file is still locked by pygame
-        for _ in range(5):
-            try:
-                if os.path.exists(temp_path):
-                    os.unlink(temp_path)
-                break
-            except OSError:
-                time.sleep(0.2)
-
-        return True
-
-    except Exception as e:
-        logger.error(f"Edge TTS error: {e}")
-        return False
+    """Fallback legacy direct usage if needed"""
+    pass
 
 
 def _play_audio_file(filepath):
@@ -244,6 +277,12 @@ def _speak_pyttsx3(text):
 def cleanup():
     """Clean up TTS resources."""
     global _pyttsx3_engine
+    
+    if _tts_text_queue:
+        _tts_text_queue.put(None)
+    if _tts_audio_queue:
+        _tts_audio_queue.put(None)
+        
     try:
         if _pyttsx3_engine:
             _pyttsx3_engine.stop()

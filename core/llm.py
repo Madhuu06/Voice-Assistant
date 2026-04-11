@@ -4,6 +4,7 @@ Provides streaming chat completions with sentence-level buffering for TTS.
 """
 
 import re
+import threading
 from openai import OpenAI
 from config import LLM_MODEL, LLM_BASE_URL, LLM_MAX_TOKENS, LLM_TEMPERATURE, LLM_SYSTEM_PROMPT
 from logger import setup_logging
@@ -12,6 +13,11 @@ logger = setup_logging()
 
 # ── Client Setup ─────────────────────────────────────────────
 _client = None
+_llm_interrupt_event = threading.Event()
+
+def stop():
+    """Interrupt the current LLM generation stream."""
+    _llm_interrupt_event.set()
 
 
 def _get_client():
@@ -26,10 +32,25 @@ def _get_client():
 
 
 def is_ollama_available():
-    """Check if Ollama is reachable."""
+    """Check if Ollama is reachable and pre-warm the model."""
     try:
         client = _get_client()
         client.models.list()
+        
+        # Pre-warm the model by sending a dummy request on a background thread
+        def _warmup():
+            try:
+                client.chat.completions.create(
+                    model=LLM_MODEL, 
+                    messages=[{"role": "user", "content": "hello"}], 
+                    max_tokens=1
+                )
+            except Exception:
+                pass
+                
+        import threading
+        threading.Thread(target=_warmup, daemon=True).start()
+        
         return True
     except Exception:
         return False
@@ -57,6 +78,10 @@ def stream_chat(messages, on_sentence=None):
     full_messages = [{"role": "system", "content": system_content}] + messages
 
     try:
+        from core import tts
+        tts._tts_stop_event.clear()
+        _llm_interrupt_event.clear()
+
         response = client.chat.completions.create(
             model=LLM_MODEL,
             messages=full_messages,
@@ -70,6 +95,9 @@ def stream_chat(messages, on_sentence=None):
         in_think_block = False  # Track <think> blocks from qwen models
 
         for chunk in response:
+            if _llm_interrupt_event.is_set():
+                break
+
             token = chunk.choices[0].delta.content
             if not token:
                 continue
@@ -97,8 +125,8 @@ def stream_chat(messages, on_sentence=None):
             full_text += token
             sentence_buffer += token
 
-            # Check for sentence boundaries and fire TTS callback
-            if on_sentence and re.search(r'[.!?]\s*$', sentence_buffer):
+            # Check for sentence/phrase boundaries and fire TTS callback
+            if on_sentence and re.search(r'[,.!?]\s*$', sentence_buffer):
                 sentences = _split_sentences(sentence_buffer)
 
                 if len(sentences) > 1:
@@ -133,9 +161,9 @@ def chat(messages):
 
 
 def _split_sentences(text):
-    """Split text into sentences, preserving punctuation."""
-    # Split on sentence-ending punctuation followed by space or end of string
-    parts = re.split(r'(?<=[.!?])\s+', text)
+    """Split text into sentences/phrases, preserving punctuation."""
+    # Split on sentence-ending punctuation or commas followed by space or end of string
+    parts = re.split(r'(?<=[,.!?])\s+', text)
     return [p for p in parts if p]
 
 

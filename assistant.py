@@ -1,8 +1,6 @@
 """
 ╔═══════════════════════════════════════════════════════════════════════╗
-║  M.A.Y.A — Modular Adaptive Your Assistant                          ║
-║  Inspired by Tony Stark's F.R.I.D.A.Y.                              ║
-║                                                                       ║
+║  E.V.A — Enhanced Voice Assistant                                     ║
 ║  Push [F12] to talk. She listens, thinks, and responds.             ║
 ║  Fully offline. Fully private. Powered by Ollama + Whisper + Kokoro.║
 ╚═══════════════════════════════════════════════════════════════════════╝
@@ -307,7 +305,7 @@ def handle_with_llm(user_input, memory, session_id):
 
     full_response = llm.stream_chat(
         messages=history,
-        on_sentence=lambda s: tts.speak_streaming(s, show_text=False),
+        on_sentence=lambda s: tts.speak(s, show_text=False),
     )
 
     # Print the full response (if streaming didn't already)
@@ -362,15 +360,14 @@ def print_banner():
     """Print the startup banner."""
     print()
     print("═" * 60)
-    print(f"  🤖 {ASSISTANT_NAME} — Voice Assistant")
-    print( "  Inspired by Tony Stark's F.R.I.D.A.Y.")
+    print(f"  🤖 {ASSISTANT_NAME} — Enhanced Voice Assistant")
     print( "  Offline • Private • Intelligent")
     print("═" * 60)
     print()
 
 
 def main():
-    """Entry point for Maya Voice Assistant."""
+    """Entry point for Eva Voice Assistant."""
     print_banner()
 
     # ── Initialize all subsystems ────────────────────────────
@@ -410,18 +407,7 @@ def main():
         else:
             print("👁️  Vision: not available (moondream model may not be pulled)\n")
 
-    # ── Greeting ─────────────────────────────────────────────
-    hour = datetime.now().hour
-    if 5 <= hour < 12:
-        greeting = "Good morning."
-    elif 12 <= hour < 18:
-        greeting = "Good afternoon."
-    elif 18 <= hour < 22:
-        greeting = "Good evening."
-    else:
-        greeting = "Hello."
-
-    tts.speak(f"{greeting} {ASSISTANT_NAME} online. Press F12 when you need me.")
+    tts.speak(f"{ASSISTANT_NAME} online.")
 
     # ── Push-to-Talk loop ────────────────────────────────────
     ptt = PushToTalk(

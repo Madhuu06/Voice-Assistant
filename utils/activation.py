@@ -79,8 +79,13 @@ class PushToTalk:
             return
         self._last_key_time = now
 
-        # Don't start recording while processing previous command
+        # If we are processing/speaking, interrupt it!
         if self._processing:
+            from core import tts, llm
+            tts.stop()
+            llm.stop()
+            self._processing = False
+            self._stop_event.set() # Reset any pending blocks
             return
 
         if self._recording:
