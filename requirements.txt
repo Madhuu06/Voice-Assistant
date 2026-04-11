@@ -1,14 +1,37 @@
+# ═══════════════════════════════════════════════════════════
+#  M.A.Y.A Voice Assistant — Dependencies
+# ═══════════════════════════════════════════════════════════
+
+# ── Core Audio ───────────────────────────────────────────
 sounddevice
-pyttsx3
+numpy
+
+# ── Speech-to-Text (Whisper) ─────────────────────────────
 openai-whisper
 torch
-numpy
-wave
-elevenlabs
-pygame
 
-# New dependencies for enhanced features
-psutil>=5.9.0
-Pillow>=9.0.0
-pycaw>=20220416
-comtypes>=1.1.10
+# ── Text-to-Speech ───────────────────────────────────────
+edge-tts                # Microsoft neural voices (primary TTS)
+pyttsx3                 # System TTS (fallback)
+
+# ── LLM (Ollama via OpenAI SDK) ─────────────────────────
+openai>=1.0.0           # OpenAI-compatible client for Ollama
+
+# ── Push-to-Talk ─────────────────────────────────────────
+keyboard                # Global hotkey detection (F12)
+
+# ── Configuration ────────────────────────────────────────
+PyYAML>=6.0
+
+# ── Vision / Screen Awareness ────────────────────────────
+Pillow>=9.0.0           # Screenshots
+requests                # Ollama vision API calls
+
+# ── System Control ───────────────────────────────────────
+psutil>=5.9.0           # System info (CPU, RAM, battery)
+pycaw>=20220416         # Windows audio control
+comtypes>=1.1.10        # COM interface for pycaw
+
+# ── Optional: Premium TTS ────────────────────────────────
+elevenlabs              # ElevenLabs cloud TTS (optional)
+pygame                  # Audio playback for ElevenLabs
