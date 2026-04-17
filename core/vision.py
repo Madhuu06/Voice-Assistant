@@ -10,8 +10,10 @@ import tempfile
 from datetime import datetime
 from config import VISION_ENABLED, VISION_MODEL
 from logger import setup_logging
+from tools.registry import registry
 
 logger = setup_logging()
+
 
 # ── Availability Checks ─────────────────────────────────────
 VISION_AVAILABLE = False
@@ -168,3 +170,26 @@ def _query_vision_model(image_path, prompt):
     except Exception as e:
         logger.error(f"Vision query failed: {e}")
         return f"Screen analysis failed: {e}"
+
+
+# ══════════════════════════════════════════════════════════════
+#  Registered Tool Wrappers
+# ══════════════════════════════════════════════════════════════
+
+@registry.register(
+    name="describe_screen",
+    description="Takes a screenshot and describes what is currently on the user's screen.",
+    parameters={
+        "type": "object",
+        "properties": {
+            "question": {
+                "type": "string",
+                "description": "Optional specific question about the screen. If empty, gives a general description."
+            }
+        }
+    }
+)
+def describe_screen_tool(question: str = ""):
+    if question:
+        return analyze_screen(question)
+    return describe_screen()

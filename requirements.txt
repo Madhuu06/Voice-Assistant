@@ -11,7 +11,9 @@ openai-whisper
 torch
 
 # ── Text-to-Speech ───────────────────────────────────────
-edge-tts                # Microsoft neural voices (primary TTS)
+kokoro-onnx>=0.1.3      # Offline local realistic TTS (primary)
+soundfile               # Audio generation for Kokoro
+edge-tts                # Microsoft neural voices (fallback)
 pyttsx3                 # System TTS (fallback)
 
 # ── LLM (Ollama via OpenAI SDK) ─────────────────────────
@@ -31,6 +33,9 @@ requests                # Ollama vision API calls
 psutil>=5.9.0           # System info (CPU, RAM, battery)
 pycaw>=20220416         # Windows audio control
 comtypes>=1.1.10        # COM interface for pycaw
+pyautogui               # Keyboard, mouse, and Spotify media control
+pygetwindow             # Window manipulation
+pyperclip               # System clipboard manipulation
 
 # ── Optional: Premium TTS ────────────────────────────────
 elevenlabs              # ElevenLabs cloud TTS (optional)

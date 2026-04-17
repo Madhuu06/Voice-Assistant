@@ -9,6 +9,7 @@ import glob
 import json
 from difflib import get_close_matches
 from logger import setup_logging
+from tools.registry import registry
 
 logger = setup_logging()
 
@@ -242,6 +243,48 @@ def find_folder(folder_name):
 
     return None
 
+@registry.register(
+    name="open_app",
+    description="Opens an application or software on the user's computer.",
+    parameters={
+        "type": "object",
+        "properties": {
+            "app_name": {"type": "string", "description": "Name of the app (e.g. Chrome, Notepad, Discord, Spotify)."}
+        },
+        "required": ["app_name"]
+    }
+)
+def open_app_tool(app_name):
+    path = find_application(app_name)
+    if path:
+        if open_path(path):
+            return f"Successfully opened {app_name}."
+    
+    # Fallback to folder
+    folder_path = find_folder(app_name)
+    if folder_path:
+        if open_path(folder_path):
+            return f"Couldn't find app {app_name}, but opened folder {app_name} instead."
+            
+    return f"Failed to find application or folder named {app_name}."
+
+@registry.register(
+    name="open_folder",
+    description="Opens a folder or directory on the user's computer.",
+    parameters={
+        "type": "object",
+        "properties": {
+            "folder_name": {"type": "string", "description": "Name of the folder (e.g. Downloads, Documents)."}
+        },
+        "required": ["folder_name"]
+    }
+)
+def open_folder_tool(folder_name):
+    path = find_folder(folder_name)
+    if path and open_path(path):
+        return f"Successfully opened folder {folder_name}."
+    return f"Failed to find folder named {folder_name}."
+
 
 # ═══════════════════════════════════════════════════════════════
 #  File Operations
@@ -269,6 +312,17 @@ def search_files(query, search_type="file", extensions=None):
     return [m[0] for m in matches]
 
 
+@registry.register(
+    name="open_file",
+    description="Searches for and opens a file or document on the computer.",
+    parameters={
+        "type": "object",
+        "properties": {
+            "query": {"type": "string", "description": "The name or keywords of the file to search for and open."}
+        },
+        "required": ["query"]
+    }
+)
 def open_file(query, extensions=None):
     """Search for and open a file. Returns status message."""
     try:

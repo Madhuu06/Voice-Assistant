@@ -1,77 +1,137 @@
-# E.V.A – Enhanced Voice Assistant 🚀
+# E.V.A – Enhanced Voice Assistant 🤖
 
-A powerful, entirely offline, highly capable voice assistant built for seamless control over your Windows computer. E.V.A combines local LLM reasoning, highly-accurate speech recognition, fast Edge TTS synthesis, and screen awareness for a true, hands-free Tony Stark-like experience.
+A fast, fully offline voice assistant that controls your Windows PC using natural language. Powered by a local LLM, Whisper STT, and Kokoro TTS — no cloud required.
 
-## ✨ Key Features
+## ✨ What Makes Eva Different
 
-### Local LLM Intelligence (Ollama + Qwen)
-- **Extremely Minimalist Identity**: E.V.A defaults to short, concise action-oriented responses.
-- **Contextual Memory**: Powered by SQLite (`eva_memory.db`) to naturally remember conversation history (up to 20 turns) across sessions.
-- **High Speed**: Integrated model pre-warming ensures zero cold-start delay.
+| Feature | Eva | Cloud Assistants |
+|--------|-----|-----------------|
+| Offline | ✅ 100% local | ❌ Needs internet |
+| Private | ✅ Nothing leaves your PC | ❌ Data sent to servers |
+| Tool Calling | ✅ Dynamic LLM-driven dispatch | ❌ Rigid voice commands |
+| Interruptible | ✅ Press F12 mid-sentence | ❌ Have to wait |
+| Extensible | ✅ Add tools in one file | ❌ Locked ecosystem |
 
-### Dual-Queue Pipelined TTS (Edge TTS)
-- **Zero Audio Gaps**: The assistant leverages a custom dual-queue TTS thread pipeline. As soon as the LLM streams the first sentence, it immediately generates and plays the audio while simultaneously piping the *next* sentences in the background, eliminating network buffer pauses.
-- **High-Quality Neural Voices**: Uses Microsoft's Edge TTS (`en-US-AriaNeural`) at a tailored `+15%` speaking rate for a natural and incredibly responsive feeling. 
-- **Interruptible (F12)**: Need her to stop talking? Press F12 seamlessly midway through a sentence. She will halt playback, clear the audio queue, and immediately start listening again.
+---
 
-### Offline STT (OpenAI Whisper)
-- Energy-based voice detection using `sounddevice` to auto-stop recording when you finish speaking.
-- Operates totally offline using lightweight Whisper (`tiny`/`base`) models.
+## 🏗️ Architecture
 
-### Screen Awareness 👁️ (Moondream Vision)
-- Includes the `moondream` model allowing E.V.A to "see" your screen and answer questions about what is currently on your display.
+```
+You (F12) → Whisper STT → qwen:7b LLM (with tools) → Tool Execution → Kokoro TTS → Speakers
+                                       ↑
+                          Tool Registry (auto-discovered)
+```
 
-### Deep System Control
-- Control Volume up/down or exact percentages.
-- Tweak display brightness levels. 
-- Fetch detailed system status (CPU, memory, storage, battery percentage).
-- Automatically open popular Windows desktop applications and local folders via advanced executable discovery.
-- Advanced capabilities: sleep, shutdown, fetch Google searches.
+### Key Design Decisions
+- **Prompt-based tool dispatch** — Tools are described in the system prompt as JSON schemas. qwen:7b emits `{"tool": "...", "args": {...}}` JSON inline, which Eva intercepts and executes. No native tool-calling API required.
+- **Dual-queue pipelined TTS** — Generator thread builds audio while player thread is still playing the previous sentence. Zero inter-sentence pauses.
+- **Kokoro offline TTS** — 88MB int8 ONNX model, auto-downloaded on first launch. Falls back to Edge TTS (cloud) then pyttsx3.
 
-## 🛠️ Installation
+---
 
-### 1. Requirements
-Ensure you have Python 3.13 installed. Additionally, you will need Ollama installed with the required models locally pulled.
+## 📂 Project Structure
 
-### 2. Clone & Setup
+```
+Voice-Assistant/
+├── assistant.py          # Main entry point — clean, no regex glue
+├── config.py / config.yaml
+├── core/
+│   ├── llm.py            # Streaming LLM + tool dispatch loop
+│   ├── tts.py            # Kokoro → Edge TTS → pyttsx3 pipeline
+│   ├── stt.py            # Whisper STT (tiny + base)
+│   ├── memory.py         # SQLite session memory
+│   └── vision.py         # Moondream screen awareness
+└── tools/
+    ├── registry.py       # @registry.register decorator + auto-discovery
+    ├── system.py         # Volume, brightness, system info, screenshots, power
+    ├── web.py            # Google search, URL open
+    ├── apps.py           # Open apps, folders, files
+    └── desktop.py        # Spotify media control, window mgmt, clipboard, typing
+```
+
+---
+
+## 🛠️ Setup
+
+### 1. Clone & Install
 ```bash
 git clone https://github.com/Madhuu06/Voice-Assistant.git
 cd Voice-Assistant
 pip install -r requirements.txt
 ```
 
-### 3. Pull Required Local Models
-E.V.A expects the following models to exist in your Ollama installation:
+### 2. Pull Required Ollama Models
 ```bash
 ollama serve
 ollama pull qwen:7b
-ollama pull moondream   # For Screen Awareness feature (Optional)
+ollama pull moondream   # Optional — enables screen awareness
 ```
 
-## 🎯 Usage
+### 3. Run Eva
+```bash
+python assistant.py
+```
 
-1. **Start the assistant**: 
-   ```bash
-   python assistant.py
-   ```
-2. **Push To Talk**: Press `F12` to speak. The assistant will record until you hit a sustained silence. 
-3. **Interrupt**: Press `F12` again mid-speech to interrupt E.V.A, halt the LLM generation, and instantly restart listening.
-
-### Command Examples
-- **General Queries**: "What's the capital of France?"
-- **System**: "Set volume to 50%", "Decrease brightness", "How much battery do I have?"
-- **Vision**: "What am I looking at right now?", "Explain what is on my screen."
-- **Apps**: "Open Chrome", "Launch VS Code", "Start Discord" 
-- **Folders**: "Open my downloads folder"
-- **Web**: "Search Google for Python tutorials"
-
-## 🔧 Configuration
-
-Everything is easily modularized via `config.yaml`:
-- Edit **system prompt** properties and **personality settings** to control how verbose or concise E.V.A acts. 
-- Edit **activation keys** mappings (default: `F12`).
-- Check `logs/eva.log` for any comprehensive error debugging.
+> On first run, Eva auto-downloads the **Kokoro TTS int8 model** (~88MB). After that, TTS is 100% offline.
 
 ---
 
-**E.V.A never sleeps. She listens, learns, and helps — so you can focus on what matters.** 🎯
+## 🎯 Usage
+
+- **Press `F12`** to start recording. Eva listens until silence.
+- **Press `F12` again** mid-response to interrupt — stops LLM generation and TTS instantly.
+- Speak naturally. The LLM figures out what tool to call.
+
+### Example Commands
+| What you say | What Eva does |
+|---|---|
+| "Open Chrome and search for Python docs" | Calls `open_app` + `search_web` |
+| "Set volume to 60" | Calls `set_volume` |
+| "What's on my screen?" | Calls `describe_screen` (moondream) |
+| "Pause the music" | Calls `media_control(play_pause)` |
+| "Copy 'hello world' to clipboard" | Calls `write_clipboard` |
+| "Minimize Chrome" | Calls `window_control(minimize)` |
+| "Type hello into the search bar" | Calls `type_text` |
+| "How much RAM am I using?" | Calls `get_system_info` |
+
+---
+
+## 🔧 Adding New Tools
+
+Create or edit any file in `tools/` and use the `@registry.register` decorator:
+
+```python
+from tools.registry import registry
+
+@registry.register(
+    name="my_tool",
+    description="Does something useful.",
+    parameters={
+        "type": "object",
+        "properties": {
+            "text": {"type": "string", "description": "Input text."}
+        },
+        "required": ["text"]
+    }
+)
+def my_tool(text: str):
+    return f"Did something with: {text}"
+```
+
+Then import the module in `assistant.py` (one line). That's it — Eva's LLM will automatically use it.
+
+---
+
+## ⚙️ Configuration
+
+All settings in `config.yaml`:
+- **LLM model**: change `llm.model` (default: `qwen:7b`)
+- **Voice**: change `tts.kokoro.voice` (default: `af_sarah`)
+- **Speed**: change `tts.kokoro.speed` (default: `1.15` = +15%)
+- **System prompt**: tune Eva's personality under `llm.system_prompt`
+- **Logs**: `logs/eva.log`
+- **Memory**: `eva_memory.db` (SQLite)
+
+---
+
+**Eva never sleeps. She listens, thinks, and acts — so you don't have to.** 🎯
