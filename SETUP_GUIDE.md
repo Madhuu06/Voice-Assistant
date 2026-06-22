@@ -1,10 +1,10 @@
 # Voice Assistant Setup Guide
 
-## ✅ Setup Complete!
+##  Setup Complete!
 
 Your advanced voice assistant with dual Whisper models and local intent parsing is now fully operational!
 
-## 🎯 Features
+##  Features
 - **Natural Language Understanding**: Supports conversational commands like "could you open notepad" instead of rigid "open app notepad"
 - **Dual Whisper Models**: 
   - Tiny model (~40MB) for fast wake word detection
@@ -13,7 +13,7 @@ Your advanced voice assistant with dual Whisper models and local intent parsing 
 - **Better Accent Support**: Whisper models understand various accents and speech patterns
 - **Wake Word Support**: Say "Friday" or "Hey Friday" to activate
 
-## 🚀 How to Run
+##  How to Run
 
 1. **Start the Assistant**:
    ```cmd
@@ -33,7 +33,7 @@ Your advanced voice assistant with dual Whisper models and local intent parsing 
      - "Search google for python tutorials"
      - "Open chrome and search for weather"
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 Voice assistant/
@@ -65,13 +65,13 @@ Voice assistant/
 - "open chrome and search for [query]"
 - "open youtube and search for [query]"
 
-## ⚠️ Expected Behavior
+##  Expected Behavior
 
 - **Audio Overflow Warnings**: You may see "Audio callback status: input overflow" messages. This is normal and doesn't affect functionality.
 - **FP16 Warning**: "FP16 is not supported on CPU; using FP32 instead" is normal for CPU-based Whisper inference.
 - **Model Loading**: First startup takes longer as Whisper downloads and caches models.
 
-## 🛠️ Dependencies Installed
+##  Dependencies Installed
 
 - `openai-whisper` - Speech recognition models
 - `sounddevice` - Audio input/output
@@ -79,7 +79,7 @@ Voice assistant/
 - `numpy` - Numerical operations
 - `torch` - Machine learning framework
 
-## 🎛️ Configuration
+##  Configuration
 
 Main settings in `config.py`:
 - `WHISPER_WAKE_MODEL = "tiny"` - Fast wake word detection
@@ -87,7 +87,7 @@ Main settings in `config.py`:
 - `SAMPLE_RATE = 16000` - Audio sampling rate
 - `CHUNK_DURATION = 3.0` - Audio processing chunks
 
-## 🚨 Troubleshooting
+##  Troubleshooting
 
 1. **Import Errors**: Make sure all dependencies are installed:
    ```cmd
@@ -100,12 +100,12 @@ Main settings in `config.py`:
 
 4. **Wake Word Not Detected**: Speak clearly and ensure "Friday" or "Hey Friday" is pronounced distinctly.
 
-## 🎉 Success Indicators
+##  Success Indicators
 
 When working properly, you'll see:
-- ✅ "Loading Whisper models..." followed by "Whisper models loaded successfully!"
-- ✅ "Voice Assistant is ready"
-- ✅ "Say 'Friday' or 'Hey Friday' to activate"
-- ✅ Audio overflow warnings (these are normal)
+-  "Loading Whisper models..." followed by "Whisper models loaded successfully!"
+-  "Voice Assistant is ready"
+-  "Say 'Friday' or 'Hey Friday' to activate"
+-  Audio overflow warnings (these are normal)
 
 Your voice assistant is now ready to use! Enjoy natural conversations with your AI assistant!
