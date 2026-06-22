@@ -1,20 +1,20 @@
-# E.V.A – Enhanced Voice Assistant 🤖
+# E.V.A – Enhanced Voice Assistant 
 
 A fast, fully offline voice assistant that controls your Windows PC using natural language. Powered by a local LLM, Whisper STT, and Kokoro TTS — no cloud required.
 
-## ✨ What Makes Eva Different
+##  What Makes Eva Different
 
 | Feature | Eva | Cloud Assistants |
 |--------|-----|-----------------|
-| Offline | ✅ 100% local | ❌ Needs internet |
-| Private | ✅ Nothing leaves your PC | ❌ Data sent to servers |
-| Tool Calling | ✅ Dynamic LLM-driven dispatch | ❌ Rigid voice commands |
-| Interruptible | ✅ Press F12 mid-sentence | ❌ Have to wait |
-| Extensible | ✅ Add tools in one file | ❌ Locked ecosystem |
+| Offline |  100% local |  Needs internet |
+| Private |  Nothing leaves your PC |  Data sent to servers |
+| Tool Calling |  Dynamic LLM-driven dispatch |  Rigid voice commands |
+| Interruptible |  Press F12 mid-sentence |  Have to wait |
+| Extensible |  Add tools in one file |  Locked ecosystem |
 
 ---
 
-## 🏗️ Architecture
+##  Architecture
 
 ```
 You (F12) → Whisper STT → qwen:7b LLM (with tools) → Tool Execution → Kokoro TTS → Speakers
@@ -29,7 +29,7 @@ You (F12) → Whisper STT → qwen:7b LLM (with tools) → Tool Execution → Ko
 
 ---
 
-## 📂 Project Structure
+##  Project Structure
 
 ```
 Voice-Assistant/
@@ -51,7 +51,7 @@ Voice-Assistant/
 
 ---
 
-## 🛠️ Setup
+##  Setup
 
 ### 1. Clone & Install
 ```bash
@@ -76,7 +76,7 @@ python assistant.py
 
 ---
 
-## 🎯 Usage
+## Usage
 
 - **Press `F12`** to start recording. Eva listens until silence.
 - **Press `F12` again** mid-response to interrupt — stops LLM generation and TTS instantly.
@@ -122,7 +122,7 @@ Then import the module in `assistant.py` (one line). That's it — Eva's LLM wil
 
 ---
 
-## ⚙️ Configuration
+##  Configuration
 
 All settings in `config.yaml`:
 - **LLM model**: change `llm.model` (default: `qwen:7b`)
