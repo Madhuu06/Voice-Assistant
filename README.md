@@ -96,7 +96,7 @@ python assistant.py
 
 ---
 
-## 🔧 Adding New Tools
+##  Adding New Tools
 
 Create or edit any file in `tools/` and use the `@registry.register` decorator:
 
@@ -134,4 +134,4 @@ All settings in `config.yaml`:
 
 ---
 
-**Eva never sleeps. She listens, thinks, and acts — so you don't have to.** 🎯
+**Eva never sleeps. She listens, thinks, and acts — so you don't have to.** 
